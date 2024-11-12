@@ -25,12 +25,14 @@ namespace TitleRemovesAbility {
         }
         public static void Patch_OnPostTitleChanged(RoyalTitleDef newTitle, ref Pawn ___pawn) {
             var modEx = newTitle.GetModExtension<ModExtension_TitleRemovesAbility>();
-            if (modEx == null) return;
-            ___pawn.abilities.RemoveAbility(modEx.abilityDef);
+            if (modEx == null || modEx.abilityDefs.NullOrEmpty()) return;
+            foreach(var i in modEx.abilityDefs) {
+                ___pawn.abilities.RemoveAbility(i);
+            }
         }
     }
 
     public class ModExtension_TitleRemovesAbility : DefModExtension {
-        public AbilityDef abilityDef = null;
+        public List<AbilityDef> abilityDefs = null;
     }
 }
